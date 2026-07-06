@@ -1,0 +1,100 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Redefine slate palette dynamically based on root CSS variables */
+  --color-slate-950: var(--slate-950);
+  --color-slate-900: var(--slate-900);
+  --color-slate-800: var(--slate-800);
+  --color-slate-700: var(--slate-700);
+  --color-slate-600: var(--slate-600);
+  --color-slate-500: var(--slate-500);
+  --color-slate-400: var(--slate-400);
+  --color-slate-300: var(--slate-300);
+  --color-slate-200: var(--slate-200);
+  --color-slate-100: var(--slate-100);
+  --color-slate-50: var(--slate-50);
+  
+  /* Override custom page backgrounds and pure white tags */
+  --color-bg-custom: var(--bg-custom);
+  --color-white: var(--white-custom);
+}
+
+/* Base values in dark mode (default) */
+:root {
+  --bg-custom: #0b0f19;
+  --slate-950: #020617;
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-50: #f8fafc;
+  --white-custom: #ffffff;
+}
+
+/* Light theme overrides */
+:root.light {
+  --bg-custom: #f1f5f9; /* slate-100 */
+  --slate-950: #f8fafc; /* slate-50 light inner panels */
+  --slate-900: #ffffff; /* pure white primary card containers */
+  --slate-800: #e2e8f0; /* slate-200 delicate light borders */
+  --slate-700: #cbd5e1; /* slate-300 dividers and layout boundaries */
+  --slate-600: #94a3b8; /* slate-400 borders / secondary icons */
+  --slate-500: #64748b; /* slate-500 secondary labels */
+  --slate-400: #4b5563; /* slate-600 readable body copy */
+  --slate-300: #374151; /* slate-700 secondary headings & controls */
+  --slate-200: #1f2937; /* slate-800 primary text / inputs text */
+  --slate-100: #111827; /* slate-900 heavy title headings */
+  --slate-50: #030712;  /* slate-950 deepest contrast texts */
+  --white-custom: #111827; /* dark text overrides for what was white in dark mode */
+}
+
+/* Base style resets and transitions */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-custom);
+  color: var(--slate-200);
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+pre, code {
+  font-family: var(--font-mono);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--slate-950);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--slate-800);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--slate-700);
+}
+
+/* Fade animation keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+

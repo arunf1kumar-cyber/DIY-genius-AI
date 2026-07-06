@@ -1,0 +1,6 @@
+{
+  "name": "DIY Genius AI",
+  "description": "An intelligent AI-powered DIY project mentor providing step-by-step guidance, component recommendations, safety alerts, troubleshooting, and visual circuit diagnostics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
