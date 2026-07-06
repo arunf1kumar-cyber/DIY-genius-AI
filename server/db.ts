@@ -1,7 +1,24 @@
 import fs from "fs";
 import path from "path";
 
-const DB_FILE = path.join(process.cwd(), "db.json");
+// If running in Vercel, use /tmp/db.json which is writable.
+// Otherwise, use the standard local db.json.
+const isVercel = process.env.VERCEL === "1" || !!process.env.VERCEL;
+const BASE_DB_FILE = path.join(process.cwd(), "db.json");
+const DB_FILE = isVercel ? "/tmp/db.json" : BASE_DB_FILE;
+
+// Copy seed/existing db.json to /tmp/db.json on cold start to preserve pre-existing credentials/projects
+if (isVercel && !fs.existsSync(DB_FILE)) {
+  try {
+    if (fs.existsSync(BASE_DB_FILE)) {
+      fs.copyFileSync(BASE_DB_FILE, DB_FILE);
+    } else {
+      fs.writeFileSync(DB_FILE, JSON.stringify({ users: [], projects: [] }, null, 2), "utf-8");
+    }
+  } catch (err) {
+    console.error("Failed to copy/initialize database in /tmp on Vercel:", err);
+  }
+}
 
 export interface User {
   id: string;

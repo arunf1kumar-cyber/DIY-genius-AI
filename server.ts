@@ -12,9 +12,7 @@ import {
 
 const JWT_SECRET = process.env.JWT_SECRET || "diy-genius-jwt-super-secret-key-1337";
 
-async function startServer() {
-  const app = express();
-  const PORT = 3000;
+const app = express();
 
   // Middleware with large limits for image analysis base64 uploads
   app.use(express.json({ limit: "50mb" }));
@@ -483,26 +481,35 @@ async function startServer() {
     }
   });
 
-  // Vite middleware for development or Static Assets for Production
-  if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
+  const isVercel = process.env.VERCEL === "1" || !!process.env.VERCEL;
+
+  if (!isVercel) {
+    const PORT = 3000;
+    async function startStandaloneServer() {
+      // Vite middleware for development or Static Assets for Production
+      if (process.env.NODE_ENV !== "production") {
+        const vite = await createViteServer({
+          server: { middlewareMode: true },
+          appType: "spa",
+        });
+        app.use(vite.middlewares);
+      } else {
+        const distPath = path.join(process.cwd(), "dist");
+        app.use(express.static(distPath));
+        app.get("*", (req, res) => {
+          res.sendFile(path.join(distPath, "index.html"));
+        });
+      }
+
+      app.listen(PORT, "0.0.0.0", () => {
+        console.log(`DIY Genius AI Server running on http://0.0.0.0:${PORT}`);
+      });
+    }
+
+    startStandaloneServer().catch((err) => {
+      console.error("Critical error starting server:", err);
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`DIY Genius AI Server running on http://0.0.0.0:${PORT}`);
-  });
-}
-
-startServer().catch((err) => {
-  console.error("Critical error starting server:", err);
-});
+export { app };
+export default app;
